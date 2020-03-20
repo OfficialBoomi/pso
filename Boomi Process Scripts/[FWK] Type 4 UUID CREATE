@@ -1,17 +1,10 @@
 /*
 ------------------------------------------------------------
-Script Name: [FWK] Type 4 UUIDs GENERATE
-     Author: Alexander Schwer (Boomi EMEA PSO)
     Purpose: Generate Type 4 UUIDs using native Java utility
    Input(s): none
   Output(s): DPP_FWK_UUID (Dynamic Process Property)
              DDP_FWK_UUID (Dynamic Document Property)
     Note(s): Script echos input document(s)
-------------------------------------------------------------
-Version Control:
- 10/09/2019 - Alexander Schwer: initial version
- 14/02/2020 - Alexander Schwer: added logic for document level properties
- 
 ------------------------------------------------------------
 */
 
