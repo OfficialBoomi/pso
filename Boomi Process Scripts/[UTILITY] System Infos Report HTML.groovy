@@ -46,7 +46,12 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Recommendation")
                     }
                     tr {
-                        td(rowspan:"4", class:"category","General")
+                        if ( object.runtimeType == "Atom" ) {
+                            td(rowspan:"3", class:"category","General")
+                        }
+                        else {
+                            td(rowspan:"4", class:"category","General")
+                        }
                         td(class:"label","Name")
                         td(class:"value",object.atomName)
                         td(class:"value","")
@@ -56,10 +61,12 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         td(class:"value",object.runtimeType)
                         td(class:"value","")
                     }
-                    tr{
-                        td(class:"label","Number of View Files")
-                        td(class:"value",object.viewFilesCount)
-                        td(class:"value","")
+                    if ( object.runtimeType != "Atom" ) {
+                        tr{
+                            td(class:"label","Number of View Files")
+                            td(class:"value",object.viewFilesCount)
+                            td(class:"value","")
+                        }
                     }
                     tr{
                         td(class:"label","Hostname")
@@ -244,155 +251,152 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Configured Value")
                         th("Recommendation")
                     }
-                    tr{
-                        td(class:"label","Force Restart After X Minutes")
-                        td(class:"value","0")
-                        td(class:"value",object.containerProperties["com.boomi.container.forceRestart"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Purge History After X Days")
-                        td(class:"value","30")
-                        td(class:"value",object.containerProperties["com.boomi.container.purgeDays"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Purge Data Immediately")
-                        td(class:"value","false")
-                        td(class:"value",object.containerProperties["com.boomi.container.purgeImmediately"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Atom Data Directory Level")
-                        td(class:"value","0")
-                        td(class:"value",object.containerProperties["com.boomi.container.dataDirNestLevel"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Process Execution Directory Level")
-                        td(class:"value","0")
-                        td(class:"value",object.containerProperties["com.boomi.container.executionDirNestLevel"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Cluster Network Transport Type")
-                        td(class:"value","")
-                        td(class:"value",object.containerProperties["com.boomi.container.cloudlet.clusterConfig"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Initial Host for Unicast")
-                        td(class:"value","")
-                        td(class:"value",object.containerProperties["com.boomi.container.cloudlet.initialHosts"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Maximum Simultaneous Executions per Node")
-                        td(class:"value","Unlimited")
-                        td(class:"value",object.containerProperties["com.boomi.container.maxRunningExecutions"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Maximum Queued Executions per Node")
-                        td(class:"value","200")
-                        td(class:"value",object.containerProperties["com.boomi.container.maxQueuedExecutions"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Rolling Restart Cluster Restart Percentage")
-                        td(class:"value","20")
-                        td(class:"value",object.containerProperties["com.boomi.container.cluster.rollingRestart.clusterRestartPercentage"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Web Server - Maximum Number of Threads")
-                        td(class:"value","250")
-                        td(class:"value",object.containerProperties["com.boomi.container.sharedServer.http.maxConnectionThreadPoolSize"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Maximum Forked Execution Time in Cloud")
-                        td(class:"value","")
-                        td(class:"value",object.containerProperties["com.boomi.container.maxExecutionTime"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Auto Restart on Out Of Memory")
-                        td(class:"value","TRUE")
-                        td(class:"value",object.containerProperties["com.boomi.container.resource.restartOnOutOfMemoryError"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Auto Restart on Too Many Files Error")
-                        td(class:"value","TRUE")
-                        td(class:"value",object.containerProperties["com.boomi.container.restartOnTooManyOpenFilesError"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Customized Restart Script File Name")
-                        td(class:"value","")
-                        td(class:"value",object.containerProperties["com.boomi.container.script.type.restart"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Execute Processes as Forked JVMs")
-                        td(class:"value","MULTI_THREAD")
-                        td(class:"value",object.containerProperties["com.boomi.container.processExecMode"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","HTTPS Protocols")
-                        td(class:"value","")
-                        td(class:"value",object.containerProperties["com.boomi.container.httpsProtocols"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Maximum Flow Control Units")
-                        td(class:"value","10")
-                        td(class:"value",object.containerProperties["com.boomi.container.flowControl.maxUnitCount"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Purge Manager Threads")
-                        td(class:"value","1")
-                        td(class:"value",object.containerProperties["com.boomi.container.purge.numPurgeThreads"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Threads for Atom Scheduling")
-                        td(class:"value","5")
-                        td(class:"value",object.containerProperties["com.boomi.container.numSyncScheduleThreads"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Threads for Atom to Atom Messages")
-                        td(class:"value","3 (Molecule)")
-                        td(class:"value",object.containerProperties["com.boomi.container.cloudlet.numSyncClusterThreads"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Working Data Local Storage Directory")
-                        td(class:"value","")
-                        td(class:"value",object.containerProperties["com.boomi.container.localDir"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Atom Queue - Maximum Thread Number")
-                        td(class:"value","250")
-                        td(class:"value",object.containerProperties["com.boomi.container.sharedServer.queue.maxTaskThreadPoolSize"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Atom Queue - Maximum Memory Allocated (%)")
-                        td(class:"value","25")
-                        td(class:"value",object.containerProperties["com.boomi.container.sharedServer.queue.memoryUsagePercent"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Atom Pending Shutdown Delay")
-                        td(class:"value","0")
-                        td(class:"value",object.containerProperties["com.boomi.container.pendingShutdownWarnTime"])
-                        td(class:"value","")
+                    def labelValue;
+                    def defaultValue;
+                    def configuredValue;
+                    object.containerProperties.each { entry ->
+                        //Exclusions
+                        if ( entry.name == "com.boomi.container.name" ) {return;}
+                        else if ( entry.name == "com.boomi.container.platformURL" ) {return;}
+                        else if ( entry.name == "com.boomi.container.proxyPassword" ) {return;}
+                        else if ( entry.name == "com.boomi.container.trackURL" ) {return;}
+                        //Inclusions
+                        else if ( entry.name == "com.boomi.container.forceRestart"){
+                            labelValue = "Force Restart After X Minutes";
+                            defaultValue = "0";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.purgeDays"){
+                            labelValue = "Purge History After X Days";
+                            defaultValue = "30";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.purgeImmediately"){
+                            labelValue = "Purge Data Immediately";
+                            defaultValue = "false";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.dataDirNestLevel"){
+                            labelValue = "Atom Data Directory Level";
+                            defaultValue = "0";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.executionDirNestLevel"){
+                            labelValue = "Process Execution Directory Level";
+                            defaultValue = "0";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.cloudlet.clusterConfig"){
+                            labelValue = "Cluster Network Transport Type";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.cloudlet.initialHosts"){
+                            labelValue = "Initial Host for Unicast";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.maxRunningExecutions"){
+                            labelValue = "Maximum Simultaneous Executions per Node";
+                            defaultValue = "Unlimited";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.maxQueuedExecutions"){
+                            labelValue = "Maximum Queued Executions per Node";
+                            defaultValue = "200";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.cluster.rollingRestart.clusterRestartPercentage"){
+                            labelValue = "Rolling Restart Cluster Restart Percentage";
+                            defaultValue = "20";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.sharedServer.http.maxConnectionThreadPoolSize"){
+                            labelValue = "Web Server - Maximum Number of Threads";
+                            defaultValue = "250";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.maxExecutionTime"){
+                            labelValue = "Maximum Forked Execution Time in Cloud";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.resource.restartOnOutOfMemoryError"){
+                            labelValue = "Auto Restart on Out Of Memory";
+                            defaultValue = "TRUE";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.restartOnTooManyOpenFilesError"){
+                            labelValue = "Auto Restart on Too Many Files Error";
+                            defaultValue = "TRUE";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.script.type.restart"){
+                            labelValue = "Customized Restart Script File Name";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.processExecMode"){
+                            labelValue = "Execute Processes as Forked JVMs";
+                            defaultValue = "MULTI_THREAD";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.httpsProtocols"){
+                            labelValue = "HTTPS Protocols";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.flowControl.maxUnitCount"){
+                            labelValue = "Maximum Flow Control Units";
+                            defaultValue = "10";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.purge.numPurgeThreads"){
+                            labelValue = "Purge Manager Threads";
+                            defaultValue = "1";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.numSyncScheduleThreads"){
+                            labelValue = "Threads for Atom Scheduling";
+                            defaultValue = "5";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.cloudlet.numSyncClusterThreads"){
+                            labelValue = "Threads for Atom to Atom Messages";
+                            defaultValue = "3 (Molecule)";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.localDir"){
+                            labelValue = "Working Data Local Storage Directory";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.sharedServer.queue.maxTaskThreadPoolSize"){
+                            labelValue = "Atom Queue - Maximum Thread Number";
+                            defaultValue = "250";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.sharedServer.queue.memoryUsagePercent"){
+                            labelValue = "Atom Queue - Maximum Memory Allocated (%)";
+                            defaultValue = "25";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "com.boomi.container.pendingShutdownWarnTime"){
+                            labelValue = "Atom Pending Shutdown Delay";
+                            defaultValue = "0";
+                            configuredValue = entry.value;
+                        }
+                        else {
+                            labelValue = entry.name;
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        tr {
+                            td(class:"label", labelValue)
+                            td(class:"value", defaultValue)
+                            td(class:"value", configuredValue)
+                            td(class:"value", "")
+                        }
                     }
                 }
                 //-----------------------
@@ -404,29 +408,45 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Configured Value")
                         th("Recommendation")
                     }
-                    tr{
-                        td(class:"label","Retry HTTP Post")
-                        td(class:"value","false")
-                        td(class:"value",object.atomProperties.system["-Dsun.net.http.retryPost"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","Temporary Directory")
-                        td(class:"value","")
-                        td(class:"value",object.atomProperties.system["-Djava.io.tmpdir"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","JMX Remote Port")
-                        td(class:"value","5002")
-                        td(class:"value",object.atomProperties.system["-Dcom.sun.management.jmxremote.port"])
-                        td(class:"value","")
-                    }
-                    tr{
-                        td(class:"label","JMX Remote RMI Port")
-                        td(class:"value","5002")
-                        td(class:"value",object.atomProperties.system["-Dcom.sun.management.jmxremote.rmi.port"])
-                        td(class:"value","")
+                    def labelValue;
+                    def defaultValue;
+                    def configuredValue;
+                    object.atomProperties.system.each { entry ->
+                        //Exclusions
+                        if ( entry.name == "XXXXX" ) {return;}
+                        else if ( entry.name == "YYYYYY" ) {return;}
+                        //Inclusions
+                        else if ( entry.name == "-Dsun.net.http.retryPost"){
+                            labelValue = "Retry HTTP Post";
+                            defaultValue = "false";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "-Djava.io.tmpdir"){
+                            labelValue = "Temporary Directory";
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "-Dcom.sun.management.jmxremote.port"){
+                            labelValue = "JMX Remote Port";
+                            defaultValue = "5002";
+                            configuredValue = entry.value;
+                        }
+                        else if ( entry.name == "-Dcom.sun.management.jmxremote.rmi.port"){
+                            labelValue = "JMX Remote RMI Port";
+                            defaultValue = "5002";
+                            configuredValue = entry.value;
+                        }
+                        else {
+                            labelValue = entry.name;
+                            defaultValue = "";
+                            configuredValue = entry.value;
+                        }
+                        tr {
+                            td(class:"label", labelValue)
+                            td(class:"value", defaultValue)
+                            td(class:"value", configuredValue)
+                            td(class:"value", "")
+                        }
                     }
                 }
                 //-----------------------
@@ -440,6 +460,22 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         tr {
                             td(class:"value",entry)
                             td(class:"value","")
+                        }
+                    }
+                }
+                //-----------------------
+                if ( object.atomProperties.other[0] ){
+                    h2"Atom (Other) Properties"
+                    table(class: "tbl") {
+                        tr {
+                            th("Property")
+                            th("Comment")
+                        }
+                        object.atomProperties.other.each { entry ->
+                            tr {
+                                td(class:"value",entry)
+                                td(class:"value","")
+                            }
                         }
                     }
                 }
