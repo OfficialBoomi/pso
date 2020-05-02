@@ -51,6 +51,7 @@ def containerProperties = container.getProperties();
 AtomVMOptions atomOptions = new AtomVMOptions();
 def atomOptionsSystemProperties = atomOptions.getSystemProperties();
 def atomOptionsAdvancedProperties = atomOptions.getAdvancedProperties();
+def atomOptionsOtherProperties = atomOptions.getOtherProperties();
 
 //Runtime Type
 String runtimeType;
@@ -74,16 +75,17 @@ FileSystem fsInstallDir = new FileSystem(installDir);
 fsInstallDirMetrics = fsInstallDir.getFSMetrics();
 inodesInstallDirMetrics = fsInstallDir.getInodeMetrics();
 
-if ( atomOptionsSystemProperties["-Djava.io.tmpdir"] ) {
-    File tmpDir = new File(atomOptionsSystemProperties["-Djava.io.tmpdir"]);
-    FileSystem fsTmpDir = new FileSystem(tmpDir);
-    fsTmpDirMetrics = fsTmpDir.getFSMetrics();
-    inodesTmpDirMetrics = fsTmpDir.getInodeMetrics();
-}
-else
-{
-    fsTmpDirMetrics = null;
-    inodesTmpDirMetrics = null;
+atomOptionsSystemProperties.each { entry ->
+    if ( entry.name == "-Djava.io.tmpdir" ){
+        File tmpDir = new File(entry.value);
+        FileSystem fsTmpDir = new FileSystem(tmpDir);
+        fsTmpDirMetrics = fsTmpDir.getFSMetrics();
+        inodesTmpDirMetrics = fsTmpDir.getInodeMetrics();
+    }
+    else {
+        fsTmpDirMetrics = null;
+        inodesTmpDirMetrics = null;
+    }
 }
 
 //Runtime Properties
@@ -120,7 +122,8 @@ output = [
         containerProperties: containerProperties,
         atomProperties: [
                 system: atomOptionsSystemProperties,
-                advanced: atomOptionsAdvancedProperties
+                advanced: atomOptionsAdvancedProperties,
+                other: atomOptionsOtherProperties
             ]
     ]
 
@@ -263,9 +266,11 @@ public class FileSystem {
 
 public class AtomVMOptions {
     private List<String> aoxList = new ArrayList<>();
-    private Map<String, Object> aodMap = new HashMap<>();
+    private List<String> aooList = new ArrayList<>();
+    private List<Map<String, Object>> aodList = new ArrayList<>();
     public AtomVMOptions(){
         new File("bin/atom.vmoptions").eachLine { line -> 
+            Map<String, Object> aodMap = new HashMap<>();
             if (!line.startsWith("#")){
                 def entry = line.tokenize("=");
                 String key = entry[0];
@@ -280,21 +285,30 @@ public class AtomVMOptions {
                     aoxList << key;
                 }
                 else if ( key.startsWith("-D") ) {
-                    aodMap.put(key,value);
+                    aodMap.put("name", key);
+                    aodMap.put("value", value);
+                    aodList.add(aodMap);
+                }
+                else if ( key ){
+                    aooList << key;
                 }
                 else {
-                    throw new Exception("Found unknown property: $key");
+                    throw new Exception("Issue with parsing atom.vmoptions file");
                 }
             }
         }
     }
     
     public getSystemProperties() {
-        return aodMap;
+        return aodList;
     }
     
     public getAdvancedProperties() {
         return aoxList;
+    }
+
+    public getOtherProperties() {
+        return aooList;
     }
 }
 
@@ -370,9 +384,10 @@ public class Heap {
 }
 
 public class Container {
-    private Map<String, Object> cpMap = new HashMap<>();
+    private List<Map<String, Object>> cpList = new ArrayList<>();
     public Container(){
         new File("conf/container.properties").eachLine { line -> 
+            Map<String, Object> cpMap = new HashMap<>();
             if (!line.startsWith("#")){
                 def entry = line.tokenize("=");
                 String key = entry[0];
@@ -383,13 +398,15 @@ public class Container {
                 else {
                     value = entry[1]
                 }
-                cpMap.put(key,value)
+                cpMap.put("name", key);
+                cpMap.put("value", value);
+                cpList.add(cpMap);
             }
         }
     }
     
     public getProperties() {
-        return cpMap;
+        return cpList;
     }
 }
 
@@ -416,5 +433,3 @@ public static int getCPUCount(){
     int cpuCount = osMXBean.getAvailableProcessors();
     return cpuCount;
 }
-
-
