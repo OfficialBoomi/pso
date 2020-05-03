@@ -251,151 +251,21 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Configured Value")
                         th("Recommendation")
                     }
-                    def labelValue;
-                    def defaultValue;
-                    def configuredValue;
                     object.containerProperties.each { entry ->
-                        //Exclusions
-                        if ( entry.name == "com.boomi.container.name" ) {return;}
-                        else if ( entry.name == "com.boomi.container.platformURL" ) {return;}
-                        else if ( entry.name == "com.boomi.container.proxyPassword" ) {return;}
-                        else if ( entry.name == "com.boomi.container.trackURL" ) {return;}
-                        //Inclusions
-                        else if ( entry.name == "com.boomi.container.forceRestart"){
-                            labelValue = "Force Restart After X Minutes";
-                            defaultValue = "0";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.purgeDays"){
-                            labelValue = "Purge History After X Days";
-                            defaultValue = "30";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.purgeImmediately"){
-                            labelValue = "Purge Data Immediately";
-                            defaultValue = "false";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.dataDirNestLevel"){
-                            labelValue = "Atom Data Directory Level";
-                            defaultValue = "0";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.executionDirNestLevel"){
-                            labelValue = "Process Execution Directory Level";
-                            defaultValue = "0";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.cloudlet.clusterConfig"){
-                            labelValue = "Cluster Network Transport Type";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.cloudlet.initialHosts"){
-                            labelValue = "Initial Host for Unicast";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.maxRunningExecutions"){
-                            labelValue = "Maximum Simultaneous Executions per Node";
-                            defaultValue = "Unlimited";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.maxQueuedExecutions"){
-                            labelValue = "Maximum Queued Executions per Node";
-                            defaultValue = "200";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.cluster.rollingRestart.clusterRestartPercentage"){
-                            labelValue = "Rolling Restart Cluster Restart Percentage";
-                            defaultValue = "20";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.sharedServer.http.maxConnectionThreadPoolSize"){
-                            labelValue = "Web Server - Maximum Number of Threads";
-                            defaultValue = "250";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.maxExecutionTime"){
-                            labelValue = "Maximum Forked Execution Time in Cloud";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.resource.restartOnOutOfMemoryError"){
-                            labelValue = "Auto Restart on Out Of Memory";
-                            defaultValue = "TRUE";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.restartOnTooManyOpenFilesError"){
-                            labelValue = "Auto Restart on Too Many Files Error";
-                            defaultValue = "TRUE";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.script.type.restart"){
-                            labelValue = "Customized Restart Script File Name";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.processExecMode"){
-                            labelValue = "Execute Processes as Forked JVMs";
-                            defaultValue = "MULTI_THREAD";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.httpsProtocols"){
-                            labelValue = "HTTPS Protocols";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.flowControl.maxUnitCount"){
-                            labelValue = "Maximum Flow Control Units";
-                            defaultValue = "10";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.purge.numPurgeThreads"){
-                            labelValue = "Purge Manager Threads";
-                            defaultValue = "1";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.numSyncScheduleThreads"){
-                            labelValue = "Threads for Atom Scheduling";
-                            defaultValue = "5";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.cloudlet.numSyncClusterThreads"){
-                            labelValue = "Threads for Atom to Atom Messages";
-                            defaultValue = "3 (Molecule)";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.localDir"){
-                            labelValue = "Working Data Local Storage Directory";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.sharedServer.queue.maxTaskThreadPoolSize"){
-                            labelValue = "Atom Queue - Maximum Thread Number";
-                            defaultValue = "250";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.sharedServer.queue.memoryUsagePercent"){
-                            labelValue = "Atom Queue - Maximum Memory Allocated (%)";
-                            defaultValue = "25";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "com.boomi.container.pendingShutdownWarnTime"){
-                            labelValue = "Atom Pending Shutdown Delay";
-                            defaultValue = "0";
-                            configuredValue = entry.value;
+                        ContainerProperties containerPropertiesRef = new ContainerProperties(entry.name);
+                        def labelValue = containerPropertiesRef.getLabel();
+                        def defaultValue = containerPropertiesRef.getDefaultValue();
+                        def isExcluded = containerPropertiesRef.isExcluded();
+                        if ( isExcluded ) {
+                            return;
                         }
                         else {
-                            labelValue = entry.name;
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        tr {
-                            td(class:"label", labelValue)
-                            td(class:"value", defaultValue)
-                            td(class:"value", configuredValue)
-                            td(class:"value", "")
+                            tr {
+                                td(class:"label", labelValue)
+                                td(class:"value", defaultValue)
+                                td(class:"value", entry.value)
+                                td(class:"value", "")
+                            }
                         }
                     }
                 }
@@ -408,45 +278,23 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Configured Value")
                         th("Recommendation")
                     }
-                    def labelValue;
-                    def defaultValue;
-                    def configuredValue;
                     object.atomProperties.system.each { entry ->
-                        //Exclusions
-                        if ( entry.name == "XXXXX" ) {return;}
-                        else if ( entry.name == "YYYYYY" ) {return;}
-                        //Inclusions
-                        else if ( entry.name == "-Dsun.net.http.retryPost"){
-                            labelValue = "Retry HTTP Post";
-                            defaultValue = "false";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "-Djava.io.tmpdir"){
-                            labelValue = "Temporary Directory";
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "-Dcom.sun.management.jmxremote.port"){
-                            labelValue = "JMX Remote Port";
-                            defaultValue = "5002";
-                            configuredValue = entry.value;
-                        }
-                        else if ( entry.name == "-Dcom.sun.management.jmxremote.rmi.port"){
-                            labelValue = "JMX Remote RMI Port";
-                            defaultValue = "5002";
-                            configuredValue = entry.value;
+                        AtomVMOptions atomOptionsRef = new AtomVMOptions(entry.name);
+                        def labelValue = atomOptionsRef.getLabel();
+                        def defaultValue = atomOptionsRef.getDefaultValue();
+                        def isExcluded = atomOptionsRef.isExcluded();
+                        
+                        if ( isExcluded ) {
+                            return;
                         }
                         else {
-                            labelValue = entry.name;
-                            defaultValue = "";
-                            configuredValue = entry.value;
-                        }
-                        tr {
-                            td(class:"label", labelValue)
-                            td(class:"value", defaultValue)
-                            td(class:"value", configuredValue)
-                            td(class:"value", "")
-                        }
+                            tr {
+                                td(class:"label", labelValue)
+                                td(class:"value", defaultValue)
+                                td(class:"value", entry.value)
+                                td(class:"value", "")
+                            }
+                        }                       
                     }
                 }
                 //-----------------------
@@ -483,6 +331,254 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
         }
         isHTML = new ByteArrayInputStream( sw.toString().getBytes( 'UTF-8' ) )
         dataContext.storeStream(isHTML, props);
+    }
+}
+
+public class ContainerProperties {
+    private String label;
+    private String defaultValue;
+    private boolean exclude;
+    public ContainerProperties(key){
+        def containerPropertiesRef = [
+            "com.boomi.container.name": [
+                label: "Container Name",
+                defaultValue: "",
+                exclude: true
+            ],
+            "com.boomi.container.platformURL": [
+                label: "Platform URL",
+                defaultValue: "",
+                exclude: true
+            ],
+            "com.boomi.container.proxyPassword": [
+                label: "Proxy Password",
+                defaultValue: "",
+                exclude: true
+            ],
+            "com.boomi.container.trackURL": [
+                label: "Track URL",
+                defaultValue: "",
+                exclude: true
+            ],
+            "com.boomi.container.forceRestart": [
+                label: "Force Restart After X Minutes",
+                defaultValue: "0",
+                exclude: false
+            ],
+            "com.boomi.container.purgeDays": [
+                label: "Purge History After X Days",
+                defaultValue: "30",
+                exclude: false
+            ],
+            "com.boomi.container.purgeImmediately": [
+                label: "Purge Data Immediately",
+                defaultValue: "false",
+                exclude: false
+            ],
+            "com.boomi.container.dataDirNestLevel": [
+                label: "Atom Data Directory Level",
+                defaultValue: "0",
+                exclude: false
+            ],
+            "com.boomi.container.executionDirNestLevel": [
+                label: "Process Execution Directory Level",
+                defaultValue: "0",
+                exclude: false
+            ],
+            "com.boomi.container.cloudlet.clusterConfig": [
+                label: "Cluster Network Transport Type",
+                defaultValue: "",
+                exclude: false
+            ],
+            "com.boomi.container.cloudlet.initialHosts": [
+                label: "Initial Host for Unicast",
+                defaultValue: "",
+                exclude: false
+            ],
+            "com.boomi.container.maxRunningExecutions": [
+                label: "Maximum Simultaneous Executions per Node",
+                defaultValue: "Unlimited",
+                exclude: false
+            ],
+            "com.boomi.container.maxQueuedExecutions": [
+                label: "Maximum Queued Executions per Node",
+                defaultValue: "200",
+                exclude: false
+            ],
+            "com.boomi.container.cluster.rollingRestart.clusterRestartPercentage": [
+                label: "Rolling Restart Cluster Restart Percentage",
+                defaultValue: "20",
+                exclude: false
+            ],
+            "com.boomi.container.sharedServer.http.maxConnectionThreadPoolSize": [
+                label: "Web Server - Maximum Number of Threads",
+                defaultValue: "250",
+                exclude: false
+            ],
+            "com.boomi.container.maxExecutionTime": [
+                label: "Maximum Forked Execution Time in Cloud",
+                defaultValue: "",
+                exclude: false
+            ],
+            "com.boomi.container.resource.restartOnOutOfMemoryError": [
+                label: "Auto Restart on Out Of Memory",
+                defaultValue: "TRUE",
+                exclude: false
+            ],
+            "com.boomi.container.restartOnTooManyOpenFilesError": [
+                label: "Auto Restart on Too Many Files Error",
+                defaultValue: "TRUE",
+                exclude: false
+            ],
+            "com.boomi.container.script.type.restart": [
+                label: "Customized Restart Script File Name",
+                defaultValue: "",
+                exclude: false
+            ],
+            "com.boomi.container.processExecMode": [
+                label: "Execute Processes as Forked JVMs",
+                defaultValue: "MULTI_THREAD",
+                exclude: false
+            ],
+            "com.boomi.container.httpsProtocols": [
+                label: "HTTPS Protocols",
+                defaultValue: "",
+                exclude: false
+            ],
+            "com.boomi.container.flowControl.maxUnitCount": [
+                label: "Maximum Flow Control Units",
+                defaultValue: "10",
+                exclude: false
+            ],
+            "com.boomi.container.purge.numPurgeThreads": [
+                label: "Purge Manager Threads",
+                defaultValue: "1",
+                exclude: false
+            ],
+            "com.boomi.container.numSyncScheduleThreads": [
+                label: "Threads for Atom Scheduling",
+                defaultValue: "5",
+                exclude: false
+            ],
+            "com.boomi.container.cloudlet.numSyncClusterThreads": [
+                label: "Threads for Atom to Atom Messages",
+                defaultValue: "3 (Molecule)",
+                exclude: false
+            ],
+            "com.boomi.container.localDir": [
+                label: "Working Data Local Storage Directory",
+                defaultValue: "",
+                exclude: false
+            ],
+            "com.boomi.container.sharedServer.queue.maxTaskThreadPoolSize": [
+                label: "Atom Queue - Maximum Thread Number",
+                defaultValue: "250",
+                exclude: false
+            ],
+            "com.boomi.container.sharedServer.queue.memoryUsagePercent": [
+                label: "Atom Queue - Maximum Memory Allocated (%)",
+                defaultValue: "25",
+                exclude: false
+            ],"com.boomi.container.pendingShutdownWarnTime": [
+                label: "Atom Pending Shutdown Delay",
+                defaultValue: "0",
+                exclude: false
+            ]
+        ]
+        if ( containerPropertiesRef[key] ) {
+            label = containerPropertiesRef[key].label
+            defaultValue = containerPropertiesRef[key].defaultValue
+            exclude = containerPropertiesRef[key].exclude
+        }
+        else {
+            label = key;
+            defaultValue = "";
+            exclude = false
+        }
+    }
+
+    public getLabel() {
+        return label;
+    }
+
+    public getDefaultValue() {
+        return defaultValue;
+    }
+
+    public isExcluded() {
+        return exclude;
+    }
+}
+
+public class AtomVMOptions {
+    private String label;
+    private String defaultValue;
+    private boolean exclude;
+    public AtomVMOptions(key){
+        def atomVMOptionsRef = [
+            "-Dsun.net.http.retryPost": [
+                label: "Retry HTTP Post",
+                defaultValue: "false",
+                exclude: false
+            ],
+            "-Djava.io.tmpdir": [
+                label: "Temporary Directory",
+                defaultValue: "",
+                exclude: false
+            ],
+            "-Dcom.sun.management.jmxremote.port": [
+                label: "JMX Remote Port",
+                defaultValue: "5002",
+                exclude: false
+            ],
+            "-Dcom.sun.management.jmxremote.rmi.port": [
+                label: "JMX Remote RMI Port",
+                defaultValue: "5002",
+                exclude: false
+            ],
+            "-Dsun.net.client.defaultConnectTimeout": [
+                label: "Client Default Connect Timeout",
+                defaultValue: "120000",
+                exclude: false
+            ],
+            "-Dsun.net.client.defaultReadTimeout": [
+                label: "Client Default Read Timeout",
+                defaultValue: "120000",
+                exclude: false
+            ],
+            "-Djava.endorsed.dirs": [
+                label: "Endorsed Directories",
+                defaultValue: "<java-home>/lib/endorsed",
+                exclude: true
+            ],
+            "-Dcom.boomi.container.securityCompatibility": [
+                label: "Java Security Compatibility",
+                defaultValue: "2019.01",
+                exclude: true
+            ]
+        ]
+        if ( atomVMOptionsRef[key] ) {
+            label = atomVMOptionsRef[key].label
+            defaultValue = atomVMOptionsRef[key].defaultValue
+            exclude = atomVMOptionsRef[key].exclude
+        }
+        else {
+            label = key;
+            defaultValue = "";
+            exclude = false
+        }
+    }
+
+    public getLabel() {
+        return label;
+    }
+
+    public getDefaultValue() {
+        return defaultValue;
+    }
+
+    public isExcluded() {
+        return exclude;
     }
 }
 
