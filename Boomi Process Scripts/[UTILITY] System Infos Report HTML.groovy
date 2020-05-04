@@ -252,17 +252,20 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Recommendation")
                     }
                     object.containerProperties.each { entry ->
-                        ContainerProperties containerPropertiesRef = new ContainerProperties(entry.name);
-                        def labelValue = containerPropertiesRef.getLabel();
-                        def defaultValue = containerPropertiesRef.getDefaultValue();
-                        def isExcluded = containerPropertiesRef.isExcluded();
-                        if ( isExcluded ) {
+                        def label
+                        if ( entry.isExcluded ) {
                             return;
                         }
                         else {
+                            if ( entry.label ) {
+                                label = entry.label
+                            }
+                            else {
+                                label = entry.name
+                            }
                             tr {
-                                td(class:"label", labelValue)
-                                td(class:"value", defaultValue)
+                                td(class:"label", label)
+                                td(class:"value", entry.defaultValue)
                                 td(class:"value", entry.value)
                                 td(class:"value", "")
                             }
@@ -279,22 +282,24 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         th("Recommendation")
                     }
                     object.atomProperties.system.each { entry ->
-                        AtomVMOptions atomOptionsRef = new AtomVMOptions(entry.name);
-                        def labelValue = atomOptionsRef.getLabel();
-                        def defaultValue = atomOptionsRef.getDefaultValue();
-                        def isExcluded = atomOptionsRef.isExcluded();
-                        
-                        if ( isExcluded ) {
+                        def label
+                        if ( entry.isExcluded ) {
                             return;
                         }
                         else {
+                            if ( entry.label ) {
+                                label = entry.label
+                            }
+                            else {
+                                label = entry.name
+                            }
                             tr {
-                                td(class:"label", labelValue)
-                                td(class:"value", defaultValue)
+                                td(class:"label", label)
+                                td(class:"value", entry.defaultValue)
                                 td(class:"value", entry.value)
                                 td(class:"value", "")
                             }
-                        }                       
+                        }                     
                     }
                 }
                 //-----------------------
@@ -312,7 +317,7 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                     }
                 }
                 //-----------------------
-                if ( object.atomProperties.other[0] ){
+                if ( object.atomProperties.other ){
                     h2"Atom (Other) Properties"
                     table(class: "tbl") {
                         tr {
@@ -331,254 +336,6 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
         }
         isHTML = new ByteArrayInputStream( sw.toString().getBytes( 'UTF-8' ) )
         dataContext.storeStream(isHTML, props);
-    }
-}
-
-public class ContainerProperties {
-    private String label;
-    private String defaultValue;
-    private boolean exclude;
-    public ContainerProperties(key){
-        def containerPropertiesRef = [
-            "com.boomi.container.name": [
-                label: "Container Name",
-                defaultValue: "",
-                exclude: true
-            ],
-            "com.boomi.container.platformURL": [
-                label: "Platform URL",
-                defaultValue: "",
-                exclude: true
-            ],
-            "com.boomi.container.proxyPassword": [
-                label: "Proxy Password",
-                defaultValue: "",
-                exclude: true
-            ],
-            "com.boomi.container.trackURL": [
-                label: "Track URL",
-                defaultValue: "",
-                exclude: true
-            ],
-            "com.boomi.container.forceRestart": [
-                label: "Force Restart After X Minutes",
-                defaultValue: "0",
-                exclude: false
-            ],
-            "com.boomi.container.purgeDays": [
-                label: "Purge History After X Days",
-                defaultValue: "30",
-                exclude: false
-            ],
-            "com.boomi.container.purgeImmediately": [
-                label: "Purge Data Immediately",
-                defaultValue: "false",
-                exclude: false
-            ],
-            "com.boomi.container.dataDirNestLevel": [
-                label: "Atom Data Directory Level",
-                defaultValue: "0",
-                exclude: false
-            ],
-            "com.boomi.container.executionDirNestLevel": [
-                label: "Process Execution Directory Level",
-                defaultValue: "0",
-                exclude: false
-            ],
-            "com.boomi.container.cloudlet.clusterConfig": [
-                label: "Cluster Network Transport Type",
-                defaultValue: "",
-                exclude: false
-            ],
-            "com.boomi.container.cloudlet.initialHosts": [
-                label: "Initial Host for Unicast",
-                defaultValue: "",
-                exclude: false
-            ],
-            "com.boomi.container.maxRunningExecutions": [
-                label: "Maximum Simultaneous Executions per Node",
-                defaultValue: "Unlimited",
-                exclude: false
-            ],
-            "com.boomi.container.maxQueuedExecutions": [
-                label: "Maximum Queued Executions per Node",
-                defaultValue: "200",
-                exclude: false
-            ],
-            "com.boomi.container.cluster.rollingRestart.clusterRestartPercentage": [
-                label: "Rolling Restart Cluster Restart Percentage",
-                defaultValue: "20",
-                exclude: false
-            ],
-            "com.boomi.container.sharedServer.http.maxConnectionThreadPoolSize": [
-                label: "Web Server - Maximum Number of Threads",
-                defaultValue: "250",
-                exclude: false
-            ],
-            "com.boomi.container.maxExecutionTime": [
-                label: "Maximum Forked Execution Time in Cloud",
-                defaultValue: "",
-                exclude: false
-            ],
-            "com.boomi.container.resource.restartOnOutOfMemoryError": [
-                label: "Auto Restart on Out Of Memory",
-                defaultValue: "TRUE",
-                exclude: false
-            ],
-            "com.boomi.container.restartOnTooManyOpenFilesError": [
-                label: "Auto Restart on Too Many Files Error",
-                defaultValue: "TRUE",
-                exclude: false
-            ],
-            "com.boomi.container.script.type.restart": [
-                label: "Customized Restart Script File Name",
-                defaultValue: "",
-                exclude: false
-            ],
-            "com.boomi.container.processExecMode": [
-                label: "Execute Processes as Forked JVMs",
-                defaultValue: "MULTI_THREAD",
-                exclude: false
-            ],
-            "com.boomi.container.httpsProtocols": [
-                label: "HTTPS Protocols",
-                defaultValue: "",
-                exclude: false
-            ],
-            "com.boomi.container.flowControl.maxUnitCount": [
-                label: "Maximum Flow Control Units",
-                defaultValue: "10",
-                exclude: false
-            ],
-            "com.boomi.container.purge.numPurgeThreads": [
-                label: "Purge Manager Threads",
-                defaultValue: "1",
-                exclude: false
-            ],
-            "com.boomi.container.numSyncScheduleThreads": [
-                label: "Threads for Atom Scheduling",
-                defaultValue: "5",
-                exclude: false
-            ],
-            "com.boomi.container.cloudlet.numSyncClusterThreads": [
-                label: "Threads for Atom to Atom Messages",
-                defaultValue: "3 (Molecule)",
-                exclude: false
-            ],
-            "com.boomi.container.localDir": [
-                label: "Working Data Local Storage Directory",
-                defaultValue: "",
-                exclude: false
-            ],
-            "com.boomi.container.sharedServer.queue.maxTaskThreadPoolSize": [
-                label: "Atom Queue - Maximum Thread Number",
-                defaultValue: "250",
-                exclude: false
-            ],
-            "com.boomi.container.sharedServer.queue.memoryUsagePercent": [
-                label: "Atom Queue - Maximum Memory Allocated (%)",
-                defaultValue: "25",
-                exclude: false
-            ],"com.boomi.container.pendingShutdownWarnTime": [
-                label: "Atom Pending Shutdown Delay",
-                defaultValue: "0",
-                exclude: false
-            ]
-        ]
-        if ( containerPropertiesRef[key] ) {
-            label = containerPropertiesRef[key].label
-            defaultValue = containerPropertiesRef[key].defaultValue
-            exclude = containerPropertiesRef[key].exclude
-        }
-        else {
-            label = key;
-            defaultValue = "";
-            exclude = false
-        }
-    }
-
-    public getLabel() {
-        return label;
-    }
-
-    public getDefaultValue() {
-        return defaultValue;
-    }
-
-    public isExcluded() {
-        return exclude;
-    }
-}
-
-public class AtomVMOptions {
-    private String label;
-    private String defaultValue;
-    private boolean exclude;
-    public AtomVMOptions(key){
-        def atomVMOptionsRef = [
-            "-Dsun.net.http.retryPost": [
-                label: "Retry HTTP Post",
-                defaultValue: "false",
-                exclude: false
-            ],
-            "-Djava.io.tmpdir": [
-                label: "Temporary Directory",
-                defaultValue: "",
-                exclude: false
-            ],
-            "-Dcom.sun.management.jmxremote.port": [
-                label: "JMX Remote Port",
-                defaultValue: "5002",
-                exclude: false
-            ],
-            "-Dcom.sun.management.jmxremote.rmi.port": [
-                label: "JMX Remote RMI Port",
-                defaultValue: "5002",
-                exclude: false
-            ],
-            "-Dsun.net.client.defaultConnectTimeout": [
-                label: "Client Default Connect Timeout",
-                defaultValue: "120000",
-                exclude: false
-            ],
-            "-Dsun.net.client.defaultReadTimeout": [
-                label: "Client Default Read Timeout",
-                defaultValue: "120000",
-                exclude: false
-            ],
-            "-Djava.endorsed.dirs": [
-                label: "Endorsed Directories",
-                defaultValue: "<java-home>/lib/endorsed",
-                exclude: true
-            ],
-            "-Dcom.boomi.container.securityCompatibility": [
-                label: "Java Security Compatibility",
-                defaultValue: "2019.01",
-                exclude: true
-            ]
-        ]
-        if ( atomVMOptionsRef[key] ) {
-            label = atomVMOptionsRef[key].label
-            defaultValue = atomVMOptionsRef[key].defaultValue
-            exclude = atomVMOptionsRef[key].exclude
-        }
-        else {
-            label = key;
-            defaultValue = "";
-            exclude = false
-        }
-    }
-
-    public getLabel() {
-        return label;
-    }
-
-    public getDefaultValue() {
-        return defaultValue;
-    }
-
-    public isExcluded() {
-        return exclude;
     }
 }
 
