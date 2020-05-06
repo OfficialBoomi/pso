@@ -92,7 +92,7 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                     }
                     //Storage
                     tr{
-                        if ( object.filesystem.tmp.storage == null ) {
+                        if ( object.filesystem.tmp == null ) {
                             td(rowspan:"5", class:"category","Storage")
                         }
                         else {
@@ -125,7 +125,7 @@ for( int i = 0; i < dataContext.getDataCount(); i++ ) {
                         td(class:"value","")
                     }
                     //Tmp Directory
-                    if ( object.filesystem.tmp.storage != null ) {
+                    if ( object.filesystem.tmp != null ) {
                         tr{
                             td(class:"label","Tmp Dir Filesystem")
                             td(class:"value",object.filesystem.tmp.inodes.fileSystem)
