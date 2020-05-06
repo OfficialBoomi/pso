@@ -61,7 +61,6 @@ if ( viewsDir.exists() ) {
     runtimeType = "Molecule";
     MoleculeCluster mc = new MoleculeCluster(viewsDir);
     viewFilesCount = mc.getViews().size();
-    logger.info("TEST: " + viewFilesCount)
 }
 else {
     runtimeType = "Atom"
@@ -75,17 +74,16 @@ FileSystem fsInstallDir = new FileSystem(installDir);
 fsInstallDirMetrics = fsInstallDir.getFSMetrics();
 inodesInstallDirMetrics = fsInstallDir.getInodeMetrics();
 
-atomOptionsSystemProperties.each { entry ->
-    if ( entry.name == "-Djava.io.tmpdir" ){
-        File tmpDir = new File(entry.value);
-        FileSystem fsTmpDir = new FileSystem(tmpDir);
-        fsTmpDirMetrics = fsTmpDir.getFSMetrics();
-        inodesTmpDirMetrics = fsTmpDir.getInodeMetrics();
-    }
-    else {
-        fsTmpDirMetrics = null;
-        inodesTmpDirMetrics = null;
-    }
+def tmpdirStr = atomOptionsSystemProperties.find { entry -> entry.name == "-Djava.io.tmpdir" }
+if ( tmpdirStr.value ){
+    File tmpDir = new File(tmpdirStr.value);
+    FileSystem fsTmpDir = new FileSystem(tmpDir);
+    fsTmpDirMetrics = fsTmpDir.getFSMetrics();
+    inodesTmpDirMetrics = fsTmpDir.getInodeMetrics();
+}
+else {
+    fsTmpDirMetrics = null;
+    inodesTmpDirMetrics = null;
 }
 
 //Runtime Properties
