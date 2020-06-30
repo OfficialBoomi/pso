@@ -75,7 +75,7 @@ fsInstallDirMetrics = fsInstallDir.getFSMetrics();
 inodesInstallDirMetrics = fsInstallDir.getInodeMetrics();
 
 def tmpdirStr = atomOptionsSystemProperties.find { entry -> entry.name == "-Djava.io.tmpdir" }
-if ( tmpdirStr.value ){
+if ( tmpdirStr ){
     File tmpDir = new File(tmpdirStr.value);
     FileSystem fsTmpDir = new FileSystem(tmpDir);
     fsTmpDirMetrics = fsTmpDir.getFSMetrics();
