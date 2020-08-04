@@ -30,9 +30,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-
 import javax.xml.transform.stream.StreamResult;
+
 import com.boomi.execution.ExecutionUtil;
 import java.util.logging.Logger;
 Logger logger = ExecutionUtil.getBaseLogger();

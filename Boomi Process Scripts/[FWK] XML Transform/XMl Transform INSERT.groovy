@@ -3,13 +3,13 @@
 Purpose:    Part of the XMl Transform Services suite - INSERT - Extracts XML element based on XPath match to
             named Dyanmic Document Property
 Input(s):
-            1.  DDP_FWK_XMLExtract_XPath - Dynamic Document Property to set the XPath reference to match and insert according to mode setting
-            2.  DDP_FWK_XMLInsert_Mode - Defines the method to use for insersion of XML
+            1.  DDP_FWK_XMLInsert_XPath - Dynamic Document Property to set the XPath reference to match and insert according to mode setting
+            2.  DDP_FWK_XMLInsert_Mode - Configures the XML insertion method:
                     BEFORE      Insert BEFORE XML element/s matched by XPath (DDP_FWK_XMLExtract_XPath)
                     AFTER       Insert AFTER XML element/s matched by XPath
                     INTO_LAST   Insert INTO the XML element/s matched by XPath as the LAST element
                     INTO_FIRST  Insert INTO the XML element/s matched by XPath as the FIRST element
-            2. DDP_FWK_XMLExtract_DDPName - The name of the Dynamic Document Property to retreive the XML from for insertion
+            2. DDP_FWK_XMLInsert_DDPName - The name of the Dynamic Document Property to retreive the XML from for insertion
             3. Documents on the flow - with inserted XML from DDP_FWK_XMLExtract_DDPName
 
 Output(s):
